@@ -1,3 +1,9 @@
+### Gist
+1. While enquing, use the condition not_full. Wait if queue is full.
+2. If queue is not full, then put and notify the not_empty so that if some consumer is waiting for queue to have elements
+3. While dequing, use the condition not_empty. Wait if queue if empty.
+4. If queue is not empty, then pop and notify the not_full so that the waiting producer resume its work
+
 > The same thing is present in the official Queue of python
 ### dequeue
 
@@ -27,5 +33,3 @@
 7. **Notify Queue Availability and Release Mutex**
    - After retrieving an item, the consumer thread notifies any waiting threads that the queue has space (it is no longer full).
    - Finally, the thread returns the item and releases the `self.mutex` lock, allowing other threads to access the queue.
-
-### enqueue
