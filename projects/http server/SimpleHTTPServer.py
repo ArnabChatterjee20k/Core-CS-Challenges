@@ -1,3 +1,6 @@
+"""
+we are flushing to send the response immediately otherwise client will wait for it
+"""
 import io,logging,os
 from http import HTTPStatus
 logging.basicConfig(level=logging.INFO)
