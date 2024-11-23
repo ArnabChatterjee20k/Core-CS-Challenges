@@ -3,16 +3,21 @@ import time
 import signal
 import sys
 import threading,time,random
+from CSVDatabase import CSVDatabase
 from cache import Cache
+from HTTPHandler import HTTPHandler
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
-THREAD_LIMIT = 3
+THREAD_LIMIT = 10
 class MultiThreadedRawServer:
     def __init__(self):
         self.threads:list[threading.Thread] = []
         self.thread_limit = threading.Semaphore(THREAD_LIMIT)
         self.terminate_event = threading.Event()
         self.connection_lock = threading.Lock()
+        self.active_connections = 0
+
+        self.db = CSVDatabase("db.csv")
 
         # Set up signal handler to ensure cleanup when exiting
         signal.signal(signal.SIGINT, self.exit_handler)  # Handle Ctrl+C
@@ -59,9 +64,10 @@ class MultiThreadedRawServer:
                 while not self.terminate_event.is_set():
                     print("semaphore ",self.thread_limit._value)
                     print(f"Connection from {addr}")
-                    conn.recv(1024)
-                    time.sleep(random.randint(1,4))
-                    conn.sendall(b"HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<html><body><h1>Hello, World!</h1></body></html>")
+                    req_stream = conn.makefile("rb")
+                    res_stream = conn.makefile("wb")
+                    HTTPHandler(req_stream,res_stream)
+                    # time.sleep(random.randint(1,4))
                     break # so that we 
             # semaphore released
 
