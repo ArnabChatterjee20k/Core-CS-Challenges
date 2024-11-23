@@ -156,3 +156,12 @@ Content-Length: 22\r\n
 \r\n
 <h1>Hello World!</h1>
 ```
+
+| **Value**           | **Meaning**                                                | **Common Use Case**                                      |
+|----------------------|------------------------------------------------------------|---------------------------------------------------------|
+| `keep-alive`        | Keep the connection open for reuse.                         | HTTP/1.1 default, multiple requests over one connection. |
+| `close`             | Close the connection after the current request/response.    | Ensure the connection is closed after the transaction.   |
+| `Upgrade`           | Upgrade the connection to a different protocol (e.g., WebSockets). | Protocol switching for WebSocket or other protocols. |
+| `proxy-connection`  | Indicates whether the connection to a proxy should be kept open. | Proxy-specific, similar to `keep-alive`.               |
+| `TE`                | Specifies acceptable transfer encodings for the connection. | Used in HTTP/1.1 to declare acceptable transfer encodings. |
+| `timeout`           | Connection may be closed after a timeout period.            | In cases where the connection might timeout due to inactivity. |
